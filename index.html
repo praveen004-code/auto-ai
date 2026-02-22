@@ -1,0 +1,37 @@
+import streamlit as st
+import pandas as pd
+import sys
+import os
+
+# Connect backend
+sys.path.append(os.path.abspath("../backend"))
+
+from main import run_autonomous_ai
+
+
+st.title("Autonomous AI Data Scientist")
+
+st.write("Upload dataset and let AI build best model automatically")
+
+
+uploaded_file = st.file_uploader("Upload CSV file")
+
+
+if uploaded_file:
+
+    data = pd.read_csv(uploaded_file)
+
+    st.write("Dataset Preview:")
+    st.dataframe(data.head())
+
+
+    if st.button("Run Autonomous AI"):
+
+        result = run_autonomous_ai(data)
+
+        st.success("Model Training Complete")
+
+        st.write("Best Model:", result["model_name"])
+
+        st.write("Accuracy:", result["accuracy"])
+        
