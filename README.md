@@ -4,138 +4,56 @@ import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 
-def preprocess_data(data):
-
-    # Remove duplicates
-    data = data.drop_duplicates()
-
-    # Fill missing values
-    data = data.fillna(data.mean(numeric_only=True))
-
-    # Encode categorical columns
-    encoder = LabelEncoder()
-
-    for col in data.select_dtypes(include='object').columns:
-        data[col] = encoder.fit_transform(data[col])
-
-    # Assume last column is target
-    X = data.iloc[:, :-1]
-    y = data.iloc[:, -1]
-
-    # Split data
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42
-    )
-
-    return X_train, X_test, y_train, y_test
-    from sklearn.ensemble import RandomForestClassifier
-from sklearn.linear_model import LogisticRegression
-from xgboost import XGBClassifier
-
-def get_models():
-
-    models = {
-
-        "Random Forest": RandomForestClassifier(),
-
-        "Logistic Regression": LogisticRegression(max_iter=1000),
-
-        "XGBoost": XGBClassifier(eval_metric='logloss')
-
-    }
-
-    return models
-    import optuna
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score
-
-def optimize_model(X_train, X_test, y_train, y_test):
-
-    def objective(trial):
-
-        n_estimators = trial.suggest_int("n_estimators", 50, 200)
-
-        model = RandomForestClassifier(n_estimators=n_estimators)
-
-        model.fit(X_train, y_train)
-
-        preds = model.predict(X_test)
-
-        return accuracy_score(y_test, preds)
-
-    study = optuna.create_study(direction="maximize")
-
-    study.optimize(objective, n_trials=10)
-
-    best_model = RandomForestClassifier(
-        n_estimators=study.best_params["n_estimators"]
-    )
-
-    best_model.fit(X_train, y_train)
-
-    return best_model
-    import shap
-
-def explain_model(model, X_train):
-
-    explainer = shap.Explainer(model, X_train)
-
-    shap_values = explainer(X_train)
-
-    return shap_values
-    from preprocessing import preprocess_data
-from model_selection import get_models
-from optimization import optimize_model
-from explainability import explain_model
-
-from sklearn.metrics import accuracy_score
-
-
-def run_autonomous_ai(data):
-
-    # Step 1: preprocess
-    X_train, X_test, y_train, y_test = preprocess_data(data)
-
-    # Step 2: model selection
-    models = get_models()
-
-    best_model = None
-    best_score = 0
-    best_name = ""
-
-    for name, model in models.items():
-
-        model.fit(X_train, y_train)
-
-        preds = model.predict(X_test)
-
-        score = accuracy_score(y_test, preds)
-
-        if score > best_score:
-
-            best_score = score
-            best_model = model
-            best_name = name
-
-    # Step 3: optimize best model
-    optimized_model = optimize_model(X_train, X_test, y_train, y_test)
-
-    optimized_score = accuracy_score(
-        y_test, optimized_model.predict(X_test)
-    )
-
-    # Step 4: explain model
-    shap_values = explain_model(optimized_model, X_train)
-
-    return {
-
-        "model_name": best_name,
-
-        "accuracy": round(optimized_score, 4),
-
-        "model": optimized_model,
-
-        "shap_values": shap_values
-
-    }
+  --#Agentic AI Framework for Autonomous Data Science Automation
     
+To develop an intelligent autonomous AI system that automates complex tasks, improves decision-making, and enhances efficiency across domain-specific applications, real-world operations, and security environments.
+
+📄 Abstract
+
+The rapid growth of artificial intelligence has increased the demand for intelligent systems capable of performing complex tasks with minimal human intervention. This project focuses on developing an autonomous AI-based system that automates data-driven decision-making processes using advanced machine learning techniques. The system aims to analyze data, preprocess information, select appropriate models, and generate optimized results automatically. By integrating automation, intelligent reasoning, and explainable AI concepts, the proposed system improves efficiency, reduces manual effort, and enables smarter decision-making. This project demonstrates how emerging AI technologies can be applied to real-world applications to build adaptive and intelligent systems aligned with future AI trends.
+
+⚙️ Methodology
+
+The proposed system follows a structured approach:
+
+Data Collection – Gather datasets relevant to the problem domain.
+
+Data Preprocessing – Clean data, handle missing values, and normalize features.
+
+Feature Engineering – Select important features automatically using AI techniques.
+
+Model Selection – Apply multiple machine learning algorithms and choose the best-performing model.
+
+Model Training & Optimization – Train models and optimize parameters for better accuracy.
+
+Evaluation – Measure performance using accuracy, precision, recall, and other metrics.
+
+Explainability & Visualization – Provide insights and explanation of model decisions.
+
+Deployment – Create a simple user interface for interaction and result display.
+
+🎯 Objectives / Outcomes
+Objectives
+
+To develop an autonomous AI system capable of automating data science workflows.
+
+To reduce manual effort in data preprocessing and model selection.
+
+To improve prediction accuracy using intelligent optimization techniques.
+
+To provide explainable and interpretable AI results.
+
+Expected Outcomes
+
+Automated end-to-end AI workflow.
+
+Faster model development process.
+
+Improved efficiency and decision-making.
+
+User-friendly system demonstrating real-world AI automation.
+
+🧾 Conclusion
+
+This project presents an autonomous AI-based system designed to automate complex data science and decision-making tasks. By integrating machine learning, automation, and explainable AI techniques, the system reduces manual effort and enhances efficiency in model development. The proposed solution demonstrates the practical use of emerging AI concepts and highlights the future direction of intelligent autonomous systems in real-world applications. The project can be further extended with advanced AI agents, real-time learning, and scalable deployment for industry-level applications.
+
